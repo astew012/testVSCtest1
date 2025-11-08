@@ -8,35 +8,59 @@
   <link rel="stylesheet" href="css/style.css">
   <meta name="description" content="">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
-
-  <!-- probably not wanted
- <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
-  <meta property="og:image:alt" content="">
-
-  <link rel="icon" href="/favicon.ico" sizes="any">
-  <link rel="icon" href="/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="icon.png">
-
-  <link rel="manifest" href="site.webmanifest">
-  <meta name="theme-color" content="#fafafa">
--->
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/addons/p5.sound.min.js"></script>
 </head>
 
 <body style="background-color: lightblue;">
 
   <script>
+    let MySound0;
+    let MySound1;
+    let MySound2;
+    let MySound3;
+    let circles = [];
+
+    function preload() {
+      soundFormats("WAV");
+      MySound0 = loadSound("144413__pjcohen__phatlofidrumkitkickbass.wav");
+      MySound1 = loadSound("318331__freakshitor669__snare-drums-oneshot-lord-lokus.wav");
+      MySound2 = loadSound("384680__mathan24__drum-r-8.wav");
+      MySound3 = loadSound("679131__josefpres__drum-kit-001-bass-drum-1.wav");
+    }
+
     function setup() {
       createCanvas(400, 400);
+
+      // create circles after preload() so .sound references are valid
+      circles = [
+        { x:100, y:100, diameter:50, r:45,  g:100, b:78,  a:50, sound: MySound0 },
+        { x:300, y:200, diameter:50, r:80,  g:20,  b:100, a:50, sound: MySound1 },
+        { x:200, y:300, diameter:50, r:150, g:50,  b:150, a:50, sound: MySound2 },
+        { x:150, y:250, diameter:50, r:200, g:80,  b:200, a:50, sound: MySound3 }
+      ];
     }
 
     function draw() {
-      background(173, 216, 230);
-      fill(255, 255, 0);
-      circle(200, 200, 200);
+      background(220);
+      for (let i = 0; i < circles.length; i++) {
+        noStroke();
+        fill(circles[i].r, circles[i].g, circles[i].b, circles[i].a);
+        circle(circles[i].x, circles[i].y, circles[i].diameter);
+      }
+    }
+
+    function mousePressed() {
+      // ensure audio context is resumed on user gesture
+      userStartAudio();
+
+      for (let i = 0; i < circles.length; i++) {
+        let d = dist(mouseX, mouseY, circles[i].x, circles[i].y);
+        if (d < circles[i].diameter / 2) {
+          if (circles[i].sound && !circles[i].sound.isPlaying()) circles[i].sound.play();
+        } else {
+          if (circles[i].sound && circles[i].sound.isPlaying()) circles[i].sound.stop();
+        }
+      }
     }
   </script>
 
