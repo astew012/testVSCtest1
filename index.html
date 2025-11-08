@@ -20,6 +20,11 @@
     let MySound3;
     let circles = [];
 
+    // Add these variables at the top with your other declarations
+    let angle = 0;
+    let pulseSpeed = 0.05;
+    let pulseAmount = 10;
+
     function preload() {
       soundFormats("WAV");
       MySound0 = loadSound("144413__pjcohen__phatlofidrumkitkickbass.wav");
@@ -33,19 +38,28 @@
 
       // create circles after preload() so .sound references are valid
       circles = [
-        { x:100, y:100, diameter:50, r:45,  g:100, b:78,  a:50, sound: MySound0 },
+        { x:100, y:100, diameter:50, r:60,  g:100, b:50,  a:50, sound: MySound0 },
         { x:300, y:200, diameter:50, r:80,  g:20,  b:100, a:50, sound: MySound1 },
         { x:200, y:300, diameter:50, r:150, g:50,  b:150, a:50, sound: MySound2 },
         { x:150, y:250, diameter:50, r:200, g:80,  b:200, a:50, sound: MySound3 }
       ];
     }
 
+    // Modify your draw function
     function draw() {
       background(220);
+      
+      // Update the angle for the pulsing effect
+      angle += pulseSpeed;
+      
       for (let i = 0; i < circles.length; i++) {
         noStroke();
         fill(circles[i].r, circles[i].g, circles[i].b, circles[i].a);
-        circle(circles[i].x, circles[i].y, circles[i].diameter);
+        
+        // Calculate pulsating diameter using sin()
+        let pulsatingDiameter = circles[i].diameter + sin(angle) * pulseAmount;
+        
+        circle(circles[i].x, circles[i].y, pulsatingDiameter);
       }
     }
 
