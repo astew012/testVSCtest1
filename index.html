@@ -20,10 +20,13 @@
     let MySound3;
     let circles = [];
 
-    // Add these variables at the top with your other declarations
+    // variables used for sin to make shape pulse 
     let angle = 0;
     let pulseSpeed = 0.05;
-    let pulseAmount = 10;
+    let pulseAmount = 5;
+
+    // Add this with your other global variables
+    let backgroundImg;
 
     function preload() {
       soundFormats("WAV");
@@ -31,23 +34,32 @@
       MySound1 = loadSound("318331__freakshitor669__snare-drums-oneshot-lord-lokus.wav");
       MySound2 = loadSound("384680__mathan24__drum-r-8.wav");
       MySound3 = loadSound("679131__josefpres__drum-kit-001-bass-drum-1.wav");
+      MySound4 = loadSound("264800__johnthewizar__snare-3.wav");
+      MySound5 = loadSound("511275__sassaby__alfaia-hit-combined.wav");
+      // Add this line to load your image
+      backgroundImg = loadImage('SLS_Artwork1.png');
     }
 
     function setup() {
       createCanvas(400, 400);
 
-      // create circles after preload() so .sound references are valid
+      // created circles as objects within an array so that later on i can use one for loop to draw them all
       circles = [
-        { x:100, y:100, diameter:50, r:60,  g:100, b:50,  a:50, sound: MySound0 },
-        { x:300, y:200, diameter:50, r:80,  g:20,  b:100, a:50, sound: MySound1 },
-        { x:200, y:300, diameter:50, r:150, g:50,  b:150, a:50, sound: MySound2 },
-        { x:150, y:250, diameter:50, r:200, g:80,  b:200, a:50, sound: MySound3 }
+        { x:122, y:228, diameter:22, r:168,  g:142, b:140, a:200, sound: MySound0 },
+        { x:162, y:245, diameter:22, r:181,  g:145, b:126, a:200, sound: MySound1 },
+        { x:188, y:240, diameter:22, r:208, g:142,  b:121, a:200, sound: MySound2 },
+        { x:221, y:231, diameter:22, r:182, g:138,  b:136, a:200, sound: MySound3 },
+        { x:321, y:229, diameter:16, r:173, g:165,  b:170, a:150, sound: MySound4 },
+        { x:32,  y:246,  diameter:20, r:147, g:138,  b:151, a:150,sound: MySound5 }   
+
       ];
     }
 
-    // Modify your draw function
+
+    
     function draw() {
-      background(220);
+      // Replace background(220) with this
+      image(backgroundImg, 0, 0, width, height);
       
       // Update the angle for the pulsing effect
       angle += pulseSpeed;
@@ -64,7 +76,7 @@
     }
 
     function mousePressed() {
-      // ensure audio context is resumed on user gesture
+      // ensure audio context is resumed on user gesture - i wonder is this necessary here if i have userStartAudio in setup?
       userStartAudio();
 
       for (let i = 0; i < circles.length; i++) {
